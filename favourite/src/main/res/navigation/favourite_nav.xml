@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@id/favourite_nav"
+    app:moduleName="favourite"
+    app:startDestination="@id/favouriteMoviesFragment">
+
+    <fragment
+        android:id="@+id/favouriteMoviesFragment"
+        android:name="com.dicoding.tmdbapp.favourite.favouritelist.FavouriteMoviesFragment"
+        android:label="favourite_movies_fragment"
+        tools:layout="@layout/favourite_movie_list_fragment" >
+        <action
+            android:id="@+id/action_favouriteMoviesFragment_to_movieDetailFragment"
+            app:destination="@id/favouriteMovieDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favouriteMovieDetailFragment"
+        android:name="com.dicoding.tmdbapp.favourite.detail.FavouriteMovieDetailFragment"
+        android:label="movie_detail_fragment"
+        tools:layout="@layout/favourite_movie_detail_fragment" >
+        <argument
+            android:name="movie"
+            app:argType="com.dicoding.tmdbapp.core.domain.model.Movie" />
+    </fragment>
+
+</navigation>

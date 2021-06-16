@@ -1,0 +1,4 @@
+rootProject.name = "TMDB App"
+include ':app'
+include ':core'
+include ':favourite'
