@@ -1,10 +1,11 @@
 package com.dicoding.tmdbapp.favourite.favouritelist
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.dicoding.tmdbapp.core.domain.model.Movie
-import com.dicoding.tmdbapp.core.domain.usecase.MoviesInteractor
 import com.dicoding.tmdbapp.core.domain.usecase.MoviesUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,8 +29,8 @@ class FavouriteMoviesViewModel @Inject constructor(
         setLoading(true)
         viewModelScope.launch {
             moviesUseCase.getFavouriteMovies().collect {
-                _list.value = it
                 setLoading(false)
+                _list.value = it
             }
         }
     }

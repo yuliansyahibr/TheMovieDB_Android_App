@@ -6,7 +6,7 @@ import androidx.paging.PagingData
 import com.dicoding.tmdbapp.core.data.source.remote.network.TMDBService
 import com.dicoding.tmdbapp.core.data.source.remote.response.MovieResponse
 import com.dicoding.tmdbapp.core.domain.model.Movie
-import com.dicoding.tmdbapp.core.util.API
+import com.dicoding.tmdbapp.core.util.APIHelper
 import com.dicoding.tmdbapp.core.util.Constants
 import kotlinx.coroutines.flow.Flow
 
@@ -43,7 +43,7 @@ class RemoteMoviesDataSource internal constructor(
     }
 
     suspend fun getMovie(id: Long): MovieResponse {
-        return API.apiHandler(api.getMovie(id))
+        return APIHelper.apiHandler(api.getMovie(id))
     }
 
 }

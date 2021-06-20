@@ -74,12 +74,12 @@ class MovieDetailViewModel @Inject constructor(
         _movie?.isFavourite = value
     }
 
-    private suspend fun addToFavourites(movie: Movie) {
+    suspend fun addToFavourites(movie: Movie) {
         moviesUseCase.addFavouriteMovie(movie)
         setFavourite(true)
     }
 
-    private suspend fun removeFromFavourite(movie: Movie) {
+    suspend fun removeFromFavourite(movie: Movie) {
         moviesUseCase.deleteFavouriteMovie(movie)
         setFavourite(false)
     }

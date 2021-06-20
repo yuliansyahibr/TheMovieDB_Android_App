@@ -11,8 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.tmdbapp.MainActivity
-import com.dicoding.tmdbapp.R
+import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.tmdbapp.core.ui.MoviesPagingAdapter
 import com.dicoding.tmdbapp.databinding.MovieListFragmentBinding
 import com.dicoding.tmdbapp.util.FragmentExt.toast
@@ -20,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class TopRatedMoviesFragment : Fragment() {
@@ -27,8 +27,9 @@ class TopRatedMoviesFragment : Fragment() {
     private val viewModel: TopRatedMoviesViewModel by viewModels()
     private var _binding: MovieListFragmentBinding? = null
     private val binding get() = _binding!!
-    private lateinit var rvAdapter: MoviesPagingAdapter
     private var fetchJob: Job? = null
+    @Inject
+    lateinit var rvAdapter: MoviesPagingAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,11 +41,7 @@ class TopRatedMoviesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val title = getString(R.string.title_toprated)
-        (activity as MainActivity).supportActionBar?.title = title
-
-        rvAdapter = MoviesPagingAdapter()
-//        rvAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        rvAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         rvAdapter.setOnItemClickListener { movie ->
             movie?.let {
                 findNavController().navigate(
@@ -60,7 +57,7 @@ class TopRatedMoviesFragment : Fragment() {
     private fun startFetchJob() {
         fetchJob?.cancel()
         fetchJob = viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.getTopRatedMovies().observe(viewLifecycleOwner, {
+            viewModel.getList().observe(viewLifecycleOwner, {
                 rvAdapter.submitData(lifecycle, it)
             })
         }
@@ -68,9 +65,10 @@ class TopRatedMoviesFragment : Fragment() {
 
     private fun setUpAdapter() {
 
-        binding.rvDaftarFilm.apply {
+        binding.rvMovies.apply {
             adapter = rvAdapter
-            layoutManager = LinearLayoutManager(requireContext())
+            setHasFixedSize(true)
+            this.layoutManager = LinearLayoutManager(requireContext())
         }
         viewLifecycleOwner.lifecycleScope.launch {
             rvAdapter.loadStateFlow.collectLatest { loadStates ->
@@ -82,13 +80,17 @@ class TopRatedMoviesFragment : Fragment() {
     }
 
     private fun showError(state: Boolean) {
-        if(state) {
-            this.toast("Error fetching data")
+        if (state) {
+            toast("Error while fetching data")
+            binding.viewError.root.visibility = View.VISIBLE
+        } else {
+            binding.viewError.root.visibility = View.GONE
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.rvMovies.adapter = null
         _binding = null
     }
 }

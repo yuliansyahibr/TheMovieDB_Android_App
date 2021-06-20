@@ -14,21 +14,23 @@ data class MovieEntity(
     @ColumnInfo(name = "title")
     val title: String = "",
     @ColumnInfo(name = "release_date")
-    var releaseDate: String = "",
+    val releaseDate: String = "",
     @ColumnInfo(name = "runtime")
-    var runtime: String,
+    val runtime: String,
     @ColumnInfo(name = "genres")
-    var genres: String,
+    val genres: String,
     @ColumnInfo(name = "poster")
-    var poster: String,
+    val poster: String,
     @ColumnInfo(name = "language")
-    var originalLanguage: String,
+    val originalLanguage: String,
     @ColumnInfo(name = "overview")
-    var overview: String,
+    val overview: String,
     @ColumnInfo(name = "status")
-    var status: String,
+    val status: String,
     @ColumnInfo(name = "user_count")
-    var userCount: Int = 0,
+    val userCount: Int = 0,
     @ColumnInfo(name = "user_score")
-    var userScore: Double = 0.0
+    val userScore: Double = 0.0,
+    @ColumnInfo(name="added_at")
+    val addedAt: Long
 )

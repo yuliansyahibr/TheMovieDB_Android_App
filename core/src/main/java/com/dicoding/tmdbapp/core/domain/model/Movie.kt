@@ -18,7 +18,8 @@ data class Movie(
     val userCount: Int = 0,
     val userScore: Double = 0.0,
     val releaseDate: String = "",
-    var isFavourite: Boolean = false
+    var isFavourite: Boolean = false,
+    var addedAt: Long? = null
 ) : Parcelable {
 
     fun getPosterImageURL(): String {
@@ -27,9 +28,16 @@ data class Movie(
         }
         return BASE_POSTER_URL+poster
     }
+    fun getDuration(): String {
+        return "${runtime}m"
+    }
+    fun getFullTitle(): String {
+        return if(releaseYear.isBlank()) title
+        else "$title ($releaseYear)"
+    }
 
     @IgnoredOnParcel
-    val releaseYear: String
+    private val releaseYear: String
         get() = if(releaseDate != "") {
             // mm/dd/yyy format
             releaseDate.split("-").first()

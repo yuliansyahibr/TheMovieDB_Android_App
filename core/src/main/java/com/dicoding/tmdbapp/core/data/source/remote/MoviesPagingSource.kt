@@ -5,21 +5,19 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.dicoding.tmdbapp.core.data.source.remote.response.PopularMoviesResponse
 import com.dicoding.tmdbapp.core.domain.model.Movie
-import com.dicoding.tmdbapp.core.util.API
+import com.dicoding.tmdbapp.core.util.APIHelper
 import com.dicoding.tmdbapp.core.util.DataMapper
 import retrofit2.Response
 
 class MoviesPagingSource(
-//    private val api: TMDBService,
     private val apiCall: suspend (page: Int)->Response<PopularMoviesResponse>
 ) : PagingSource<Int, Movie>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         return try {
             val pageIndex = params.key ?: 1
-//            val response = api.getPopularMovies(page = pageIndex)
             val response = apiCall(pageIndex)
-            val popularMoviesResponse = API.apiHandler(response)
+            val popularMoviesResponse = APIHelper.apiHandler(response)
             val movies: List<Movie> =  popularMoviesResponse.results.map { item ->
                 DataMapper.popularMovieItemResponseToMovie(item)
             }
@@ -48,8 +46,6 @@ class MoviesPagingSource(
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
-//            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
-//                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
     }
 }

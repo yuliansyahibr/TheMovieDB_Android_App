@@ -11,15 +11,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.tmdbapp.MainActivity
-import com.dicoding.tmdbapp.R
+import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.tmdbapp.core.ui.MoviesPagingAdapter
 import com.dicoding.tmdbapp.databinding.MovieListFragmentBinding
 import com.dicoding.tmdbapp.util.FragmentExt.toast
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PopularMoviesFragment : Fragment() {
@@ -27,8 +25,8 @@ class PopularMoviesFragment : Fragment() {
     private val viewModel: PopularMoviesViewModel by viewModels()
     private var _binding: MovieListFragmentBinding? = null
     private val binding get() = _binding!!
-    private lateinit var rvAdapter: MoviesPagingAdapter
-    private var fetchJob: Job? = null
+    @Inject
+    lateinit var rvAdapter: MoviesPagingAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,42 +38,31 @@ class PopularMoviesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val title = getString(R.string.title_popular)
-        (activity as MainActivity).supportActionBar?.title = title
-
-        rvAdapter = MoviesPagingAdapter()
-//        rvAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        rvAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         rvAdapter.setOnItemClickListener { movie ->
             movie?.let {
                 findNavController().navigate(
-                    PopularMoviesFragmentDirections.actionPopularMoviesFragmentToMovieDetailFragment(it)
+                    PopularMoviesFragmentDirections.actionPopularMoviesFragmentToMovieDetailFragment(
+                        it
+                    )
                 )
             }
         }
-
-        setUpAdapter()
-        startFetchJob()
+        loadList()
     }
 
-    private fun startFetchJob() {
-        fetchJob?.cancel()
-        fetchJob = viewLifecycleOwner.lifecycleScope.launch {
-//            viewModel.getPopularMovies().collectLatest {
-//                rvAdapter.submitData(it)
-//            }
+    private fun loadList() {
+        binding.rvMovies.apply {
+            adapter = rvAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+            setHasFixedSize(true)
+        }
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.movies.observe(viewLifecycleOwner, {
                 rvAdapter.submitData(lifecycle, it)
             })
         }
-    }
-
-    private fun setUpAdapter() {
-
-        binding.rvDaftarFilm.apply {
-            adapter = rvAdapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             rvAdapter.loadStateFlow.collectLatest { loadStates ->
                 binding.listProgressBar.isVisible = loadStates.refresh is LoadState.Loading
                 showError(loadStates.refresh is LoadState.Error)
@@ -85,13 +72,17 @@ class PopularMoviesFragment : Fragment() {
     }
 
     private fun showError(state: Boolean) {
-        if(state) {
-            this.toast("Error fetching data")
+        if (state) {
+            toast("Error while fetching data")
+            binding.viewError.root.visibility = View.VISIBLE
+        } else {
+            binding.viewError.root.visibility = View.GONE
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.rvMovies.adapter = null
         _binding = null
     }
 

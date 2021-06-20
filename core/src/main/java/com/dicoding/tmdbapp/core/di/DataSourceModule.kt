@@ -13,6 +13,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
+import net.sqlcipher.database.SQLiteDatabase
+import net.sqlcipher.database.SupportFactory
+import okhttp3.CertificatePinner
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -27,11 +30,19 @@ class DataSourceModule {
     @Provides
     fun provideDatabase(
         @ApplicationContext context: Context
-    ) = Room.databaseBuilder(
-        context,
-        MoviesDatabase::class.java,
-        "movies.db"
-    ).fallbackToDestructiveMigration().build()
+    ): MoviesDatabase {
+        val passphrase: ByteArray = SQLiteDatabase.getBytes(
+            Constants.PASSPHRASE_STRING.toCharArray()
+        )
+        val factory = SupportFactory(passphrase)
+        return Room.databaseBuilder(
+            context,
+            MoviesDatabase::class.java,
+            Constants.DATABASE_NAME
+        ).fallbackToDestructiveMigration()
+            .openHelperFactory(factory)
+            .build()
+    }
 
     @Singleton
     @Provides
@@ -42,8 +53,15 @@ class DataSourceModule {
                 .build()
             chain.proceed(request)
         }
+        val hostname = Constants.HOST_NAME
+        val certificatePinner = CertificatePinner.Builder()
+            .add(hostname, "sha256/+vqZVAzTqUP8BGkfl88yU7SQ3C8J2uNEa55B7RZjEg0=")
+            .add(hostname, "sha256/JSMzqOOrtyOT1kmau6zKhgT676hGgczD5VMdRMyJZFA=")
+            .add(hostname, "sha256/++MBgDH5WGvL9Bcn5Be30cRcL0f5O+NyoXuWtQdX1aI=")
+            .build()
         val okHttpClient = OkHttpClient.Builder().apply {
             addInterceptor(headersInterceptor)
+            certificatePinner(certificatePinner)
         }.build()
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
@@ -62,7 +80,7 @@ class DataSourceModule {
             moviesDatabase = db
         )
     }
-//
+
     @Singleton
     @Provides
     fun provideRemoteDataSource(

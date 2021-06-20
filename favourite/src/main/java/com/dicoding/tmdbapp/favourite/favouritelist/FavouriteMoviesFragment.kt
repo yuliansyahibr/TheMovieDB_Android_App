@@ -7,12 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.tmdbapp.MainActivity
 import com.dicoding.tmdbapp.core.ui.MovieRVAdapter
-import com.dicoding.tmdbapp.R
-import com.dicoding.tmdbapp.favourite.di.DaggerFavouriteComponent
 import com.dicoding.tmdbapp.di.FavouriteModuleDependencies
 import com.dicoding.tmdbapp.favourite.databinding.FavouriteMovieListFragmentBinding
+import com.dicoding.tmdbapp.favourite.di.DaggerFavouriteComponent
 import com.dicoding.tmdbapp.util.FragmentExt.setUpLoader
 import dagger.hilt.android.EntryPointAccessors
 import javax.inject.Inject
@@ -23,7 +21,8 @@ class FavouriteMoviesFragment : Fragment() {
     lateinit var viewModel: FavouriteMoviesViewModel
     private var _binding: FavouriteMovieListFragmentBinding? = null
     private val binding get() = _binding!!
-    private lateinit var rvAdapter: MovieRVAdapter
+    @Inject
+    lateinit var rvAdapter: MovieRVAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         initInjection()
@@ -49,21 +48,18 @@ class FavouriteMoviesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val title = getString(R.string.title_favourite)
-        (activity as MainActivity).supportActionBar?.title = title
 
         hideEmptyErrorText()
         setUpLoader(binding.listProgressBar, viewModel.loading)
 
-        rvAdapter = MovieRVAdapter()
         rvAdapter.setOnItemClickListener { movie ->
             movie?.let {
                 findNavController().navigate(
-                    FavouriteMoviesFragmentDirections.actionFavouriteMoviesFragmentToMovieDetailFragment(it)
+                    FavouriteMoviesFragmentDirections.actionFavouriteNavToMovieDetailFragment(it)
                 )
             }
         }
-        binding.rvDaftarFilm.apply {
+        binding.rvMovies.apply {
             adapter = rvAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
@@ -77,15 +73,16 @@ class FavouriteMoviesFragment : Fragment() {
     }
 
     private fun hideEmptyErrorText() {
-        binding.tvErrorFavourites.visibility = View.GONE
+        binding.viewEmpty.root.visibility = View.GONE
     }
 
     private fun showEmptyErrorText() {
-        binding.tvErrorFavourites.visibility = View.VISIBLE
+        binding.viewEmpty.root.visibility = View.VISIBLE
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.rvMovies.adapter = null
         _binding = null
     }
 

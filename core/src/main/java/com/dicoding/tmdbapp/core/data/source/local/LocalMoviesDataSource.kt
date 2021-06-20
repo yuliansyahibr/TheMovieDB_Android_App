@@ -15,8 +15,6 @@ class LocalMoviesDataSource internal constructor(
 
     suspend fun addFavouriteMovie(movieEntity: MovieEntity) = movieDao.insertFavouriteMovie(movieEntity)
 
-    suspend fun updateFavouriteMovie(movieEntity: MovieEntity) = movieDao.updateFavoriteMovie(movieEntity)
-
     suspend fun deleteFavouriteMovie(movieEntity: MovieEntity) = movieDao.deleteFavouriteMovie(movieEntity)
 
 }

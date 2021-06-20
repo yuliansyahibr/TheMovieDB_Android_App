@@ -9,14 +9,13 @@ import androidx.paging.cachedIn
 import com.dicoding.tmdbapp.core.domain.model.Movie
 import com.dicoding.tmdbapp.core.domain.usecase.MoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
 class PopularMoviesViewModel @Inject constructor(
-    private val moviesUseCase: MoviesUseCase
+    moviesUseCase: MoviesUseCase
 ) : ViewModel() {
 
-    val movies: LiveData<PagingData<Movie>>
-        get() = moviesUseCase.getPopularMovies().cachedIn(viewModelScope).asLiveData()
+    val movies: LiveData<PagingData<Movie>> =
+        moviesUseCase.getPopularMovies().cachedIn(viewModelScope).asLiveData()
 }

@@ -1,12 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="content_description">Poster</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="title_popular" tools:keep="@string/title_popular">Popular Movies</string>
+    <string name="menu_popular" tools:keep="@string/menu_popular">Popular</string>
+    <string name="title_toprated" tools:keep="@string/title_toprated">Top Rated Movies</string>
+    <string name="menu_toprated" tools:keep="@string/menu_toprated">Top rated</string>
+    <string name="title_favourite" tools:keep="@string/title_favourite">My Favourite List</string>
+    <string name="menu_favourite" tools:keep="@string/menu_favourite">My favourites</string>
+
+    <string name="ranking_number">#1</string>
+    <string name="content_description" tools:keep="@string/content_description">Poster</string>
     <string name="title">Title</string>
-    <string name="separator">•</string>
-    <string name="original_language">English</string>
-    <string name="duration">1h</string>
-    <string name="genres">Comedy</string>
-    <string name="release_year">1950</string>
+    <string name="type" tools:keep="@string/type">Movie</string>
+    <string name="separator" tools:keep="@string/separator">•</string>
+    <string name="original_language_label" tools:keep="@string/original_language_label">Language</string>
+    <string name="original_language" tools:keep="@string/original_language">English</string>
+    <string name="duration_label" tools:keep="@string/duration_label">Duration</string>
+    <string name="duration" tools:keep="@string/duration">1h</string>
+    <string name="genres_label" tools:keep="@string/genres_label">Genres</string>
+    <string name="genres" tools:keep="@string/genres">Comedy</string>
+    <string name="release_year_label" tools:keep="@string/release_year_label">Year</string>
+    <string name="release_year" tools:keep="@string/release_year">1950</string>
+    <string name="release_date_label" tools:keep="@string/release_date_label">Release Date</string>
     <string name="release_date">01/01/1950</string>
+    <string name="status_label" tools:keep="@string/status_label">Status</string>
+    <string name="status" tools:keep="@string/status">Released</string>
+    <string name="user_score_label" tools:keep="@string/user_score_label">User Score</string>
+    <string name="user_score" tools:keep="@string/user_score">0</string>
+    <string name="user_count_label" tools:keep="@string/user_count_label">Ratings</string>
+    <string name="user_count" tools:keep="@string/user_count">0</string>
+    <string name="overview_label" tools:keep="@string/overview_label">Overview</string>
     <string name="overview">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam et ipsum sed augue mollis iaculis. Nulla vel erat neque. Nulla rhoncus augue nibh, sit amet varius eros pretium blandit. Ut placerat euismod neque, ut congue felis venenatis sit amet. Sed accumsan congue justo, ultrices condimentum eros efficitur vitae. Donec eu elit diam. In ullamcorper, ipsum nec faucibus maximus, dolor libero ornare massa, at tempus tellus quam vel purus. Etiam a fringilla arcu, at fermentum dolor.</string>
+    <string name="home_menu" tools:keep="@string/home_menu">Home</string>
+
+    <string name="empty_favourite_list" tools:keep="@string/empty_favourite_list">Your favourite list is empty. Try adding some movies to your list.</string>
+    <string name="no_connection" tools:keep="@string/no_connection">No Internet Connection</string>
 </resources>

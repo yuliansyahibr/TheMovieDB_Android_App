@@ -5,10 +5,11 @@
     android:id="@+id/main_graph"
     app:startDestination="@id/popularMoviesFragment">
 
+
     <fragment
         android:id="@+id/popularMoviesFragment"
         android:name="com.dicoding.tmdbapp.popular.PopularMoviesFragment"
-        android:label="popular_movies_fragment"
+        android:label="@string/title_popular"
         tools:layout="@layout/movie_list_fragment" >
         <action
             android:id="@+id/action_popularMoviesFragment_to_movieDetailFragment"
@@ -17,7 +18,7 @@
     <fragment
         android:id="@+id/topRatedMoviesFragment"
         android:name="com.dicoding.tmdbapp.toprated.TopRatedMoviesFragment"
-        android:label="top_rated_movies_fragment"
+        android:label="@string/title_toprated"
         tools:layout="@layout/movie_list_fragment" >
         <action
             android:id="@+id/action_topRatedMoviesFragment_to_movieDetailFragment"
@@ -28,8 +29,8 @@
         android:id="@+id/favourite_nav"
         android:name="com.dicoding.tmdbapp.favourite"
         app:moduleName="favourite"
-        app:graphResName="favourite_nav"
-        app:graphPackage="com.dicoding.tmdbapp.favourite"/>
+        app:graphResName="favourite_nav">
+    </include-dynamic>
 
     <fragment
         android:id="@+id/movieDetailFragment"

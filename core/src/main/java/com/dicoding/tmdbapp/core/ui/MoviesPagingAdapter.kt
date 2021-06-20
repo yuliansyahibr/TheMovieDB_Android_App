@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import com.dicoding.tmdbapp.core.databinding.ItemMovieBinding
 import com.dicoding.tmdbapp.core.domain.model.Movie
 
-class MoviesPagingAdapter : PagingDataAdapter<Movie, MovieRVAdapter.MovieViewHolder>(
-    FilmComparator()
+class MoviesPagingAdapter : PagingDataAdapter<Movie, MovieViewHolder>(
+    diffCallback
 ) {
 
     private lateinit var onItemClickListener: (Movie?) -> Unit
@@ -20,8 +20,8 @@ class MoviesPagingAdapter : PagingDataAdapter<Movie, MovieRVAdapter.MovieViewHol
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): MovieRVAdapter.MovieViewHolder {
-        return MovieRVAdapter.MovieViewHolder(
+    ): MovieViewHolder {
+        return MovieViewHolder(
             ItemMovieBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             ),
@@ -29,41 +29,23 @@ class MoviesPagingAdapter : PagingDataAdapter<Movie, MovieRVAdapter.MovieViewHol
         )
     }
 
-    override fun onBindViewHolder(holder: MovieRVAdapter.MovieViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val item = getItem(position)
         // Note that item may be null. ViewHolder must support binding a
         // null item as a placeholder.
-        holder.bind(item)
+        holder.bind(item, position)
     }
 
-//    inner class MovieViewHolder(
-//        private val binding: ItemMovieBinding
-//    ) : RecyclerView.ViewHolder(binding.root) {
-//        fun bind(movie: Movie?) {
-//            movie?.let {
-//                with(binding) {
-//                    tvItemTitle.text = it.title
-//                    tvItemReleaseDate.text = it.releaseDate
-//                    tvItemOverview.text = it.overview
-//                    Glide.with(itemView)
-//                        .load(it.getPosterImageURL())
-//                        .into(imgItemPoster)
-//                }
-//            }
-//            itemView.setOnClickListener {
-//                onItemClickListener(movie)
-//            }
-//        }
-//    }
+    companion object {
+        val diffCallback = object : DiffUtil.ItemCallback<Movie>() {
+            override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+                // Id is unique.
+                return oldItem.id == newItem.id
+            }
 
-    private class FilmComparator : DiffUtil.ItemCallback<Movie>() {
-        override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
-            // Id is unique.
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
-            return oldItem == newItem
+            override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }

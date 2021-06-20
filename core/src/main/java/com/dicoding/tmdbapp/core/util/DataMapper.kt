@@ -30,7 +30,7 @@ object DataMapper {
                 title = it.title,
                 releaseDate = it.releaseDate ?: "Unknown",
                 runtime = it.runtime,
-                genres = it.genres.joinToString(","){ genre ->  genre.name },
+                genres = it.genres.joinToString(", "){ genre ->  genre.name },
                 poster = it.poster ?: "",
                 originalLanguage = it.originalLanguage,
                 overview = it.overview,
@@ -56,7 +56,8 @@ object DataMapper {
                 status = it.status,
                 userCount = it.userCount,
                 userScore = it.userScore,
-                isFavourite = true
+                isFavourite = true,
+                addedAt = it.addedAt
             )
         }
     }
@@ -74,7 +75,8 @@ object DataMapper {
                 overview = it.overview,
                 status = it.status,
                 userCount = it.userCount,
-                userScore = it.userScore
+                userScore = it.userScore,
+                addedAt = it.addedAt ?: System.currentTimeMillis()/1000
             )
         }
     }

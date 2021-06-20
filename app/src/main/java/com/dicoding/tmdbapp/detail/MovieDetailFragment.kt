@@ -31,14 +31,18 @@ class MovieDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val title = ""
+        val mainActivity = requireActivity() as MainActivity
+        mainActivity.supportActionBar?.title = title
+        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        mainActivity.binding.bottomNavView.visibility = View.GONE
+
         _binding = MovieDetailFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val title = getString(R.string.title_favourite)
-        (activity as MainActivity).supportActionBar?.title = title
 
         val movie = args.movie
         fab = binding.btnFav
@@ -46,7 +50,7 @@ class MovieDetailFragment : Fragment() {
 
         viewModel.getMovie(movie.id).observe(viewLifecycleOwner, {
             if(it != null) {
-                (activity as MainActivity).supportActionBar?.title = it.title
+                (activity as MainActivity).supportActionBar?.title = it.getFullTitle()
                 setDetailView(view, it)
             }
         })
@@ -78,7 +82,7 @@ class MovieDetailFragment : Fragment() {
     }
 
     private fun changeFabToAddState() {
-        fab.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+        fab.setImageResource(R.drawable.ic_round_favorite_border_24)
     }
 
     private fun changeFabToDeleteState() {
@@ -88,10 +92,10 @@ class MovieDetailFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun setDetailView(view: View, movie: Movie) {
         with(binding) {
-            tvTitle.text = "${movie.title} (${movie.releaseYear})"
+            tvTitle.text = movie.getFullTitle()
             tvType.text = getString(R.string.type)
             tvReleaseDate.text = movie.releaseDate
-            tvDuration.text = movie.runtime
+            tvDuration.text = movie.getDuration()
             tvUserScore.text = movie.userScore.toString()
             tvUserCount.text = movie.userCount.toString()
             tvGenres.text = movie.genres
@@ -106,11 +110,10 @@ class MovieDetailFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (activity as MainActivity).binding.bottomNavView.visibility = View.VISIBLE
         _binding = null
     }
-
-
 
 }
