@@ -12,7 +12,7 @@ jobs:
     # These next lines define the Android machine image executor: https://circleci.com/docs/2.0/executor-types/
     executor:
       name: android/android-machine
-      resource-class: large
+      resource-class: medium
 
     steps:
       - checkout
@@ -30,7 +30,7 @@ jobs:
           command: |
             mkdir -p ~/test-results/junit/
             find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
-            when: always
+          when: always
       - store_test_results:
           path: ~/test-results
       - store_artifacts:
@@ -39,7 +39,7 @@ jobs:
   release-build:
     executor:
       name: android/android-machine
-      resource-class: xlarge
+      resource-class: medium
     steps:
       - checkout
       - android/restore-gradle-cache
