@@ -5,7 +5,7 @@ dependencies {
     implementation "androidx.legacy:legacy-support-v4:$legacy_support_version"
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$androidx_junit_version"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0"
 
     implementation "androidx.cardview:cardview:$cardview_version"
     implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
@@ -13,11 +13,11 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_version"
 
     // debugImplementation because LeakCanary should only run in debug builds.
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:2.7"
 
     //dagger
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation "com.google.dagger:hilt-android:2.37"
+    kapt "com.google.dagger:hilt-android-compiler:2.37"
 
     // Mockito
     testImplementation "org.mockito:mockito-core:$mockito_version"
@@ -25,5 +25,5 @@ dependencies {
     testImplementation "org.mockito.kotlin:mockito-kotlin:$mockito_kotlin_version"
     // Unit test Coroutines in viewModel
     testImplementation "androidx.arch.core:core-testing:$arch_test_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlin_coroutines_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.0-native-mt"
 }

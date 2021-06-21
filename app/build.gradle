@@ -10,6 +10,17 @@ plugins {
 apply from: '../shared_dependencies.gradle'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file(releaseStoreFile)
+            storePassword releaseStorePassword
+            keyAlias releaseKeyAlias
+            keyPassword releaseKeyPassword
+
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
@@ -17,8 +28,8 @@ android {
         applicationId "com.dicoding.tmdbapp"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -27,12 +38,14 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
         debug {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -45,7 +58,7 @@ android {
     }
     sourceSets {
         test {
-            java.srcDir project(":core").file("src/test/java")
+            java.srcDirs += project(":core").file("src/test/java")
         }
     }
     dynamicFeatures = [':favourite']

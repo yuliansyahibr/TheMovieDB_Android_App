@@ -33,7 +33,7 @@ android {
     }
     sourceSets {
         test {
-            java.srcDir project(":core").file("src/test/java")
+            java.srcDirs += project(":core").file("src/test/java")
         }
     }
     buildTypes {

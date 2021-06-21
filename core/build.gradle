@@ -71,8 +71,6 @@ dependencies {
     api "androidx.activity:activity-ktx:$activity_ktx_version"
     api "androidx.fragment:fragment-ktx:$fragment_ktx_version"
 
-    // ViewPager2
-    api "androidx.viewpager2:viewpager2:$viewpager2_version"
     // Paging
     api "androidx.paging:paging-runtime-ktx:$paging_version"
 
