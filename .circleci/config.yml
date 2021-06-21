@@ -53,9 +53,9 @@ jobs:
       - run:
           name: Build APK
           command: |
-            ./gradlew :app:packageDebugUniversalApk
+            ./gradlew :app:packageReleaseUniversalApk
       - store_artifacts:
-          path: app/build/outputs/apk/debug/
+          path: app/build/outputs/universal_apk/release/
           destination: artifact-file  
 
 workflows:

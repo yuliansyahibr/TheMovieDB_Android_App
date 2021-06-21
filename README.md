@@ -10,6 +10,12 @@ In this repository you will find an Android project with:
 - Unit testing for repository and viewmodels
 - CircleCI config to run tests and build universal-release apk
 
+# Screenshots 
+![home](screenshots/ss_home.jpg)
+![empty](screenshots/ss_fav_empty.jpg)
+![detail](screenshots/ss_detail.jpg)
+![fav_list](screenshots/ss_fav.jpg)
+
 # Dependencies used
 
 - Navigation

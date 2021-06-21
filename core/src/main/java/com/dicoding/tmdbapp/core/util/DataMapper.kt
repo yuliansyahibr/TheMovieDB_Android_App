@@ -30,7 +30,7 @@ object DataMapper {
                 title = it.title,
                 releaseDate = it.releaseDate ?: "Unknown",
                 runtime = it.runtime,
-                genres = it.genres.joinToString(", "){ genre ->  genre.name },
+                genres = it.genres.joinToString(", "){ it.toString() },
                 poster = it.poster ?: "",
                 originalLanguage = it.originalLanguage,
                 overview = it.overview,
